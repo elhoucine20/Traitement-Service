@@ -23,10 +23,7 @@ class StoreTraitmentRequest extends FormRequest
     {
         return [
             //
-            'name'=>'required|string',
             'description'=>'required',
-            'disease'=>'required',
-            'dosage'=>'required',
         ];
     }
 }
