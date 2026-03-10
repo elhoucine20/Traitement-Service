@@ -11,8 +11,15 @@ class TraitementController extends Controller
     //
 
     public function index(){
-        $traitments = Traitement::all();
+        $traitments = Traitement::paginate(2);
         return  $traitments;
+
+        // pour search
+        // $query = Traitement::query();
+        // if($request->name){
+        //     $query->where('name',$request->name);
+        // }
+        // return $query->get();
     }
     public function create(){}
     
