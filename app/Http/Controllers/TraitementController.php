@@ -13,22 +13,12 @@ class TraitementController extends Controller
     public function index(){
         $traitments = Traitement::paginate(2);
         return  $traitments;
-
-        // pour search
-        // $query = Traitement::query();
-        // if($request->name){
-        //     $query->where('name',$request->name);
-        // }
-        // return $query->get();
     }
     public function create(){}
     
     public function store(StoreTraitmentRequest $request){
         Traitement::create([
-            "name"=>$request->name,
             "description"=>$request->description,
-            "disease"=>$request->name,
-            "dosage"=>$request->dosage,
         ]);
     }
     public function edit(){}
