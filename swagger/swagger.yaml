@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: RareCare - Traitements API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /traitments:
+    get:
+      summary: Get all traitements
+      tags:
+        - Traitements
+      responses:
+        '200':
+          description: List of traitements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Traitement'
+    post:
+      summary: Create a traitement
+      tags:
+        - Traitements
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraitementInput'
+      responses:
+        '201':
+          description: Traitement created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Traitement'
+        '422':
+          description: Validation error
+
+  /traitments/{id}:
+    get:
+      summary: Get a traitement by ID
+      tags:
+        - Traitements
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Traitement details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Traitement'
+        '404':
+          description: Traitement not found
+    delete:
+      summary: Delete a traitement
+      tags:
+        - Traitements
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Traitement deleted
+        '404':
+          description: Traitement not found
+
+  /traitment/search:
+    get:
+      summary: Search traitement by description
+      tags:
+        - Traitements
+      parameters:
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Traitement'
+
+components:
+  schemas:
+    Traitement:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    TraitementInput:
+      type: object
+      properties:
+        description:
+          type: string
+      required:
+        - description
