@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTraitmentRequest;
 use App\Http\Resources\TraitementResource;
 use App\Models\Traitement;
+use App\Services\TraitementService;
 use Illuminate\Http\Request;
 
 /**
@@ -15,6 +16,8 @@ use Illuminate\Http\Request;
  */
 class TraitementController extends Controller
 {
+    public function __construct(private TraitementService $service) {}
+
     /**
      * @OA\Get(
      *     path="/api/traitments",
@@ -121,8 +124,8 @@ class TraitementController extends Controller
      * )
      */
     public function destroy($id) {
-        Traitement::destroy($id);
-        return response()->json(['message'=>'Deleted successfully']);
+        $this->service->delete($id);
+        return response()->json(['message' => 'Deleted successfully']);
     }
 
     /**

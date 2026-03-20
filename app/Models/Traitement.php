@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Traitement extends Model
 {
     //
-        protected $fillable = ['description',];
+        protected $fillable = ['description', 'dossier_id'];
 
-        public function traitements()
+        public function medicaments()
         {
-            return $this->belongsToMany(Traitement::class, 'medicament_traitement');
+            return $this->belongsToMany(Medicament::class, 'medicament_traitement');
         }
 }

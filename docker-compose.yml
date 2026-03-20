@@ -1,46 +1,49 @@
 version: '3.8'
 
 services:
-  app:
+  traitement_service:
     build:
       context: .
-      dockerfile: ./docker/php/Dockerfile
-    container_name: app_container
+      dockerfile: ./docker/php/dockerfile
+    container_name: traitement_service_container
     volumes:
       - ./:/var/www/html
     environment:
       APP_ENV: local
       APP_DEBUG: 'true'
       DB_CONNECTION: pgsql
-      DB_HOST: postgres_db
+      DB_HOST: traitement_db
       DB_PORT: 5432
-      DB_DATABASE: rarecare
-      DB_USERNAME: postgres
-      DB_PASSWORD: 12345678
+      DB_DATABASE: traitement_db
+      DB_USERNAME: traitement
+      DB_PASSWORD: traitement
     depends_on:
-      - postgres_db
+      - traitement_db
+    expose:
+      - "9000"
 
-  nginx:
+  traitement_nginx:
     image: nginx:alpine
-    container_name: nginx_container
+    container_name: traitement_nginx_container
     ports:
-      - "8080:80"
+      - "8084:80"
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./:/var/www/html
     depends_on:
-      - app
+      - traitement_service
 
-  postgres_db:
+  traitement_db:
     image: postgres:16
     container_name: traitement_db_container
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: rarecare
-      POSTGRES_PASSWORD: 12345678
+      POSTGRES_USER: traitement
+      POSTGRES_DB: traitement_db
+      POSTGRES_PASSWORD: traitement
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - rarecare_data:/var/lib/postgresql/data
+      - traitement_db_data:/var/lib/postgresql/data
 
 volumes:
-  rarecare_data:
+  traitement_db_data:
