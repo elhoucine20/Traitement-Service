@@ -44,6 +44,37 @@ return [
             'after_commit' => false,
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'hosts' => [
+                [
+                    'host' => env('RABBITMQ_HOST', 'rabbit'),
+                    'port' => env('RABBITMQ_PORT', 5672),
+                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                    'user' => env('RABBITMQ_LOGIN', 'guest'),
+                    'password' => env('RABBITMQ_PASSWORD', 'guest'),
+                ]
+            ],
+            'options' => [
+                'exchange' => [
+                    'name' => 'folder_events',
+                    'type' => 'topic',
+                    'declare' => true,
+                    'durable' => true,
+                    'auto_delete' => false,
+                ],
+                'queue' => [
+                    'name' => env('RABBITMQ_QUEUE', 'traitement_service_queue'),
+                    'job' => \App\Jobs\SyncDossierJob::class,
+                    'declare' => true,
+                    'durable' => true,
+                    'exclusive' => false,
+                    'auto_delete' => false,
+                    'binding' => false,
+                ],
+            ],
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => env('BEANSTALKD_QUEUE_HOST', 'localhost'),

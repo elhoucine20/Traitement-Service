@@ -9,8 +9,8 @@ class Medicament extends Model
     //
     protected $fillable = ['name',];
 
-    public function medicaments()
-{
-    return $this->belongsToMany(Medicament::class, 'medicament_traitement');
-}
+    public function traitements()
+    {
+        return $this->belongsToMany(Traitement::class, 'medicament_traitement');
+    }
 }
