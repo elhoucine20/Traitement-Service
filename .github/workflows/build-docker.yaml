@@ -44,7 +44,7 @@ jobs:
         run: docker compose exec -T app php artisan test
 
       - name: Build Docker image
-        run: docker build -t rarecare-app .
+        run: docker build -t rarecare-app -f docker/php/Dockerfile.
 
       # 9. Stop containers (optional but clean)
       - name: Stop containers
