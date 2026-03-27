@@ -1,0 +1,33 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /home/ubuntu
+
+            if [ ! -d "Traitement-Service" ]; then
+              git clone https://github.com/elhoucine20/Traitement-Service.git
+            fi
+
+            cd Traitement-Service
+
+            git pull origin main
+
+            docker build -t rarecare-app -f docker/php/Dockerfile .
+            docker stop rarecare-app || true
+            docker rm rarecare-app || true
+            docker run -d -p 8000:8000 --name rarecare-app rarecare-app
