@@ -1,0 +1,48 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Create .env file
+      - name: Copy .env
+        run: cp .env.example .env
+
+      # 3. Build and run containers
+      - name: Build Docker containers
+        run: docker compose up -d --build
+
+      # 4. Wait a bit for DB to be ready
+      - name: Wait for containers
+        run: sleep 10
+
+      # 5. Install dependencies inside container
+      - name: Install dependencies
+        run: docker compose exec -T app composer install
+
+      # 6. Generate Laravel key
+      - name: Generate key
+        run: docker compose exec -T app php artisan key:generate
+
+      # 7. Run migrations
+      - name: Run migrations
+        run: docker compose exec -T app php artisan migrate --force
+
+      # 8. Run tests
+      - name: Run tests
+        run: docker compose exec -T app php artisan test
+
+      # 9. Stop containers (optional but clean)
+      - name: Stop containers
+        run: docker compose down

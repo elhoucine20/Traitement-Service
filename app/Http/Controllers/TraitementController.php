@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTraitmentRequest;
 use App\Http\Resources\TraitementResource;
+use App\Http\Resources\UserResource;
 use App\Models\Traitement;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,9 @@ class TraitementController extends Controller
      */
     public function index() {
         $traitments = Traitement::all();
-        return TraitementResource::collection($traitments);
+        // return $traitments;
+        return UserResource::collection($traitments);
+
     }
 
     /**
@@ -107,7 +110,7 @@ class TraitementController extends Controller
         $traitment = Traitement::findOrFail($id);
         $traitment->update(['description'=>$request->description]);
     
-        return new TraitementResource($traitment);
+        // return new TraitementResource($traitment);
     }
 
 
