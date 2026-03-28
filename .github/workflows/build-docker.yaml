@@ -70,9 +70,9 @@ jobs:
 
             cd Traitement-Service
 
-            git pull origin main
+            git pull origin dev
 
-            docker build -t rarecare-app -f docker/php/Dockerfile .
+            docker build -t rarecare-app -f docker/php/dockerfile .
             docker stop rarecare-app || true
             docker rm rarecare-app || true
             docker run -d -p 8000:8000 --name rarecare-app rarecare-app
