@@ -2,21 +2,33 @@ FROM php:8.4-fpm
 
 # Install PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions gd intl zip opcache pdo_pgsql ctype iconv
+
+RUN install-php-extensions \
+    gd \
+    intl \
+    zip \
+    opcache \
+    pdo_pgsql \
+    ctype \
+    iconv
 
 WORKDIR /var/www/html
 
-# Step 1: copy composer files
-COPY composer.json composer.lock ./
+#  copy full project 
+COPY . .
 
-# Step 2: composer install
+#  composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
+
+#  env
+RUN cp .env.example .env
+
+#  install deps
 RUN composer install --no-dev --optimize-autoloader
 
-# Step 3: copy rest of project
-COPY . .
-RUN cp .env.example .env
+#  generate key
 RUN php artisan key:generate
 
 EXPOSE 9000
