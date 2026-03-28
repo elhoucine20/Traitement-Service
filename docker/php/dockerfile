@@ -1,6 +1,6 @@
 FROM php:8.4-fpm
 
-# Install system dependencies and PHP extensions
+# Install PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 RUN install-php-extensions \
@@ -14,18 +14,21 @@ RUN install-php-extensions \
 
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock ./
+#  copy full project 
+COPY . .
 
+#  composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-COPY .env.example .env
+#  env
+RUN cp .env.example .env
 
-RUN composer install --working-dir=/var/www/html --no-dev --optimize-autoloader
+#  install deps
+RUN composer install --no-dev --optimize-autoloader
 
-COPY ./ ./
-
-RUN composer dump-autoload --working-dir=/var/www/html --optimize --no-dev --classmap-authoritative || true
+#  generate key
+RUN php artisan key:generate
 
 EXPOSE 9000
