@@ -22,10 +22,10 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY .env.example .env
 
-RUN composer install --working-dir=/var/www/html --optimize-autoloader
+RUN composer install --working-dir=/var/www/html --no-dev --optimize-autoloader
 
 COPY ./ ./
 
-RUN composer dump-autoload --working-dir=/var/www/html --optimize --no-dev --classmap-authoritative
+RUN composer dump-autoload --working-dir=/var/www/html --optimize --no-dev --classmap-authoritative || true
 
 EXPOSE 9000
