@@ -15,3 +15,5 @@ class Medicament extends Model
             return $this->belongsToMany(Medicament::class, 'medicament_traitement');
         }
 }
+
+
