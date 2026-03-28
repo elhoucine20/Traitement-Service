@@ -22,7 +22,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY .env.example .env
 
-RUN composer install --working-dir=/var/www/html --no-dev --optimize-autoloader
+RUN composer install --working-dir=/var/www/html --optimize-autoloader
 
 COPY ./ ./
 
